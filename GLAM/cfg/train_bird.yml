@@ -1,0 +1,47 @@
+CONFIG_NAME: 'MirrorGAN'
+DATASET_NAME: 'health'
+# DATA_DIR: '/home/wangzhao/MirrorGAN/data/birds'
+DATA_DIR: '/home/wangzhao/presummer/data/health'
+GPU_ID: 1
+WORKERS: 4
+OUTPUT_PATH: '../health_output/'
+TREE:
+    BRANCH_NUM: 3
+
+TRAIN:
+    FLAG: True
+    NET_G: ''
+    # NET_G: '/home/wangzhao/presummer/data/output/Model/netG_epoch_490.pth'
+    B_NET_D: True
+    BATCH_SIZE: 12  # 22
+    MAX_EPOCH: 2550
+    SNAPSHOT_INTERVAL: 10
+    DISCRIMINATOR_LR: 0.0002
+    GENERATOR_LR: 0.0002
+
+    NET_E: '/home/wangzhao/presummer/AttnGAN/output/health_DAMSM/Model/text_encoder100.pth'
+    SMOOTH:
+        GAMMA1: 4.0  # 1,2,5 good 4 best  10&100bad
+        GAMMA2: 5.0
+        GAMMA3: 10.0  # 10good 1&100bad
+        LAMBDA: 0.0
+        LAMBDA1: 10.0
+
+CAP:
+    embed_size: 256
+    hidden_size: 256
+    num_layers: 1
+    learning_rate: 0.001
+    caption_cnn_path: '../data/STREAM/encoder-1-700.ckpt'
+    caption_rnn_path: '../data/STREAM/decoder-1-700.ckpt'
+
+GAN:
+    DF_DIM: 64
+    GF_DIM: 32
+    Z_DIM: 100
+    R_NUM: 2
+    GLOBAL_ATTEN_ON: True
+
+TEXT:
+    EMBEDDING_DIM: 256
+    CAPTIONS_PER_IMAGE: 1 #num 10

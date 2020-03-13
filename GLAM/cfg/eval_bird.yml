@@ -1,0 +1,29 @@
+CONFIG_NAME: 'MirrorGAN'
+DATASET_NAME: 'health'
+#DATA_DIR: '/home/wangzhao/MirrorGAN/data/birds'
+DATA_DIR: '/home/wangzhao/presummer/data/health'
+GPU_ID: 3
+WORKERS: 1
+
+B_VALIDATION: True  # True  # False
+TREE:
+    BRANCH_NUM: 3
+
+TRAIN:
+    FLAG: False
+    NET_G: '/home/wangzhao/presummer/health_output/output/Model/netG_epoch_2530.pth'   # path to the trained model
+    #NET_G: '/home/wangzhao/presummer/data/output/Model/netG_epoch_200.pth'
+    B_NET_D: False
+    BATCH_SIZE: 16
+    NET_E: '../data/STEM/text_encoder.pth'
+GAN:
+    DF_DIM: 64
+    GF_DIM: 32
+    Z_DIM: 100
+    R_NUM: 2
+    GLOBAL_ATTEN_ON: True
+
+TEXT:
+    EMBEDDING_DIM: 256
+    CAPTIONS_PER_IMAGE: 10
+    WORDS_NUM: 25
