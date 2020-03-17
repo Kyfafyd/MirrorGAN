@@ -11,11 +11,11 @@ TREE:
 
 TRAIN:
     FLAG: False
-    NET_G: '/home/wangzhao/presummer/health_output/output/Model/netG_epoch_2530.pth'   # path to the trained model
+    NET_G: '/home/wangzhao/presummer/health_output/output/Model/netG_epoch_28000.pth'   # path to the trained model
     #NET_G: '/home/wangzhao/presummer/data/output/Model/netG_epoch_200.pth'
-    B_NET_D: False
-    BATCH_SIZE: 16
-    NET_E: '../data/STEM/text_encoder.pth'
+    B_NET_D: True
+    BATCH_SIZE: 2
+    NET_E: '/home/wangzhao/presummer/output/health_DAMSM/Model/text_encoder200.pth'
 GAN:
     DF_DIM: 64
     GF_DIM: 32
@@ -25,5 +25,5 @@ GAN:
 
 TEXT:
     EMBEDDING_DIM: 256
-    CAPTIONS_PER_IMAGE: 10
-    WORDS_NUM: 25
+    CAPTIONS_PER_IMAGE: 1
+    WORDS_NUM: 2

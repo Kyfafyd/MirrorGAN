@@ -25,6 +25,7 @@ class Trainer(object):
         if cfg.TRAIN.FLAG:
             self.model_dir = os.path.join(output_dir, 'Model')
             self.image_dir = os.path.join(output_dir, 'Image')
+            print(self.image_dir)
             mkdir_p(self.model_dir)
             mkdir_p(self.image_dir)
 
@@ -57,11 +58,9 @@ class Trainer(object):
         print('Load image encoder from:', img_encoder_path)
         image_encoder.eval()
 
-        text_encoder = \
-            RNN_ENCODER(self.n_words, nhidden=cfg.TEXT.EMBEDDING_DIM)
-        state_dict = \
-            torch.load(cfg.TRAIN.NET_E,
-                       map_location=lambda storage, loc: storage)
+        # self.n_words = 156
+        text_encoder = RNN_ENCODER(self.n_words, nhidden=cfg.TEXT.EMBEDDING_DIM)
+        state_dict = torch.load(cfg.TRAIN.NET_E, map_location=lambda storage, loc: storage)
         text_encoder.load_state_dict(state_dict)
         for p in text_encoder.parameters():
             p.requires_grad = False
@@ -76,7 +75,9 @@ class Trainer(object):
         print('Load caption model from:', cfg.CAP.caption_cnn_path)
         caption_cnn.eval()
 
+        # self.n_words = 9
         caption_rnn = CAPTION_RNN(cfg.CAP.embed_size, cfg.CAP.hidden_size * 2, self.n_words, cfg.CAP.num_layers)
+        # caption_rnn = CAPTION_RNN(cfg.CAP.embed_size, cfg.CAP.hidden_size * 2, self.n_words, cfg.CAP.num_layers)
         caption_rnn.load_state_dict(torch.load(cfg.CAP.caption_rnn_path, map_location=lambda storage, loc: storage))
         for p in caption_rnn.parameters():
             p.requires_grad = False
@@ -292,7 +293,7 @@ class Trainer(object):
                     errD.backward()
                     optimizersD[i].step()
                     errD_total += errD
-                    D_logs += 'errD%d: %.2f ' % (i, errD.data)
+                    D_logs += 'errD%d: %.6f ' % (i, errD.data)
 
                 # (4) Update G network: maximize log(D(G(z)))
                 # compute total loss for training G
@@ -304,28 +305,28 @@ class Trainer(object):
                                    words_embs, sent_emb, match_labels, cap_lens, class_ids)
                 kl_loss = KL_loss(mu, logvar)
                 errG_total += kl_loss
-                G_logs += 'kl_loss: %.2f ' % kl_loss.data
+                G_logs += 'kl_loss: %.6f ' % kl_loss.data
                 # backward and update parameters
                 errG_total.backward()
                 optimizerG.step()
                 for p, avg_p in zip(netG.parameters(), avg_param_G):
                     avg_p.mul_(0.999).add_(0.001, p.data)
 
-                if gen_iterations % 100 == 0:
+                if gen_iterations % (self.num_batches/100 + 1) == 0:
                     print(D_logs + '\n' + G_logs)
                 # save images
-                if gen_iterations % 1000 == 0:
-                    backup_para = copy_G_params(netG)
-                    load_params(netG, avg_param_G)
-                    self.save_img_results(netG, fixed_noise, sent_emb,
-                                          words_embs, mask, image_encoder,
-                                          captions, cap_lens, epoch, name='average')
-                    load_params(netG, backup_para)
+                # if gen_iterations % 1000 == 0:
+                #     backup_para = copy_G_params(netG)
+                #     load_params(netG, avg_param_G)
+                #     self.save_img_results(netG, fixed_noise, sent_emb,
+                #                           words_embs, mask, image_encoder,
+                #                           captions, cap_lens, epoch, name='average')
+                #     load_params(netG, backup_para)
             end_t = time.time()
 
             print('''Epoch [%d/%d][%d]
-                  Loss_D: %.2f Loss_G: %.2f Time: %.2fs\n'''
-                  % (epoch+1, self.max_epoch, self.num_batches,
+                  Loss_D: %.6f Loss_G: %.6f Time: %.6fs\n'''
+                  % (epoch + 1, self.max_epoch, self.num_batches,
                      errD_total.data, errG_total.data,
                      end_t - start_t))
 
@@ -391,14 +392,18 @@ class Trainer(object):
             s_tmp = model_dir[:model_dir.rfind('.pth')]
             save_dir = '%s/%s' % (s_tmp, split_dir)
             mkdir_p(save_dir)
+            print('save_dir:', save_dir)
 
             cnt = 0
 
-            for _ in range(1):  # (cfg.TEXT.CAPTIONS_PER_IMAGE):
+            for _ in range(cfg.TEXT.CAPTIONS_PER_IMAGE):
+                # print('here')
+                # print(self.data_loader)
                 for step, data in enumerate(self.data_loader, 0):
                     cnt += batch_size
-                    if step % 100 == 0:
-                        print('step: ', step)
+                    print('step: ', step)
+                    # if step % 100 == 0:
+                    #     print('step: ', step)
                     # if step > 50:
                     #     break
 
@@ -423,6 +428,7 @@ class Trainer(object):
                         if not os.path.isdir(folder):
                             print('Make a new folder: ', folder)
                             mkdir_p(folder)
+                        print(folder)
                         k = -1
                         # for k in range(len(fake_imgs)):
                         im = fake_imgs[k][j].data.cpu().numpy()

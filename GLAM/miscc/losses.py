@@ -187,7 +187,7 @@ def generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fak
             g_loss = cond_errG
         errG_total += g_loss
 
-        logs += 'g_loss%d: %.2f ' % (i, g_loss.data)
+        logs += 'g_loss%d: %.6f ' % (i, g_loss.data)
 
         if i == (numDs - 1):
             fakeimg_feature = caption_cnn(fake_imgs[i])
@@ -196,8 +196,10 @@ def generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fak
             cap_output = caption_rnn(fakeimg_feature, captions, cap_lens)
             cap_loss = caption_loss(cap_output, target_cap) * cfg.TRAIN.SMOOTH.LAMBDA1
 
+            # print(cap_output, target_cap)
+
             errG_total += cap_loss
-            logs += 'cap_loss: %.2f, ' % cap_loss
+            logs += 'cap_loss: %.6f, ' % cap_loss
     return errG_total, logs
 
 

@@ -4,22 +4,22 @@ DATASET_NAME: 'health'
 DATA_DIR: '/home/wangzhao/presummer/data/health'
 GPU_ID: 1
 WORKERS: 4
-OUTPUT_PATH: '../health_output/'
+OUTPUT_PATH: '../health_output'
 TREE:
-    BRANCH_NUM: 3
+    BRANCH_NUM: 4
 
 TRAIN:
     FLAG: True
+    # NET_G: '/home/wangzhao/presummer/health_output/output/Model/netG_epoch_20000.pth'
     NET_G: ''
-    # NET_G: '/home/wangzhao/presummer/data/output/Model/netG_epoch_490.pth'
     B_NET_D: True
-    BATCH_SIZE: 12  # 22
-    MAX_EPOCH: 2550
-    SNAPSHOT_INTERVAL: 10
+    BATCH_SIZE: 2  # 22
+    MAX_EPOCH: 30000
+    SNAPSHOT_INTERVAL: 200
     DISCRIMINATOR_LR: 0.0002
     GENERATOR_LR: 0.0002
 
-    NET_E: '/home/wangzhao/presummer/AttnGAN/output/health_DAMSM/Model/text_encoder100.pth'
+    NET_E: '/home/wangzhao/presummer/output/health_DAMSM/Model/text_encoder200.pth'
     SMOOTH:
         GAMMA1: 4.0  # 1,2,5 good 4 best  10&100bad
         GAMMA2: 5.0
@@ -32,8 +32,8 @@ CAP:
     hidden_size: 256
     num_layers: 1
     learning_rate: 0.001
-    caption_cnn_path: '../data/STREAM/encoder-1-700.ckpt'
-    caption_rnn_path: '../data/STREAM/decoder-1-700.ckpt'
+    caption_cnn_path: '/home/wangzhao/presummer/image_captioning/models/encoder-191-1.ckpt'
+    caption_rnn_path: '/home/wangzhao/presummer/image_captioning/models/decoder-191-1.ckpt'
 
 GAN:
     DF_DIM: 64

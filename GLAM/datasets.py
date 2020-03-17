@@ -107,11 +107,11 @@ class TextDataset(data.Dataset):
 
         self.data = []
         self.data_dir = data_dir
-        if data_dir.find('health') or data_dir.find('birds') != -1:
-            self.bbox = self.load_bbox()  # a dictionary key = file_name value = bbox
-        else:
-            self.bbox = None
-        # self.bbox = None
+        # if data_dir.find('health') or data_dir.find('birds') != -1:
+        #     self.bbox = self.load_bbox()  # a dictionary key = file_name value = bbox
+        # else:
+        #     self.bbox = None
+        self.bbox = None
         split_dir = os.path.join(data_dir, split)  # split_dir is either train or test
 
         # load text to data did things like:
@@ -303,7 +303,7 @@ class TextDataset(data.Dataset):
             bbox = None
             data_dir = self.data_dir
         #
-        img_name = '%s/images/%s.jpg' % (data_dir, key)
+        img_name = '%s/CUB_200_2011/images/%s.jpg' % (data_dir, key)
         imgs = get_imgs(img_name, self.imsize,
                         bbox, self.transform, normalize=self.norm)
         # random select a sentence
