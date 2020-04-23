@@ -3,7 +3,7 @@
 <hr>
 
 
-*This repo is unofficial reproduction of paper [MirrorGAN: Learning Text-to-image Generation by Redescription](https://arxiv.org/abs/1903.05854)*
+*This repo is an unofficial reproduction of paper [MirrorGAN: Learning Text-to-image Generation by Redescription](https://arxiv.org/abs/1903.05854)*
 
 
 
@@ -74,6 +74,20 @@ Your Own Dataset
   ```bash
   python2 preprocess.py
   ```
+  
+## Pretrained STEM/STREAM 
+
+Below pretrained models are for birds dataset, if you want to apply MirrorGAN to your own dataset, please follow preprocess.py and pretrain section.
+
+#### STEM
+
+- [image_encoder.pth](https://docs.google.com/uc?export=download&id=18tGgZVQDlDVArs1xfiBN3SnlVe00QyuK)
+- [text_encoder.pth](https://docs.google.com/uc?export=download&id=1vkuHgqZShLJpsLC_Xvuxj6M0WqlM82C7)
+
+#### STREAM
+
+- [decoder.ckpt](https://docs.google.com/uc?export=download&id=19JrwUlDjCHaf--TYS1lWxUPLvHkRU31k)
+- [encoder.ckpt](https://docs.google.com/uc?export=download&id=1Lj000raq4KHyRjjLt0dvmYitnBdnuuGE)
 
 ## Train/Test
 
@@ -86,6 +100,8 @@ python2 pretrain_DAMSM.py
 
 # STREAM
 cd STREAM
+python2 resize.py
+python2 build_vocab.py
 python2 train.py
 ```
 
@@ -114,8 +130,3 @@ If you have any questions, please feel free to contact [ZHAO WANG](mailto:kyfafy
 [AttnGAN: Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks](http://openaccess.thecvf.com/content_cvpr_2018/papers/Xu_AttnGAN_Fine-Grained_Text_CVPR_2018_paper.pdf) 
 
 [Image Captioning](https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/image_captioning)
-
-
-
-
-
